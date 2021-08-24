@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Moment from "moment";
 import "./style.css";
 
 /*
@@ -15,42 +16,59 @@ Complete the challenges below, *** USING REACT HOOKS ***:
 */
 
 export default function App() {
-  const [rotateCount, setRotateCount] = useState(0);
   const colors = ["#e301be", "#6b00ff", "#ff0066", "#24c5e0"];
+  const [rotateCount, setRotateCount] = useState(0);
+  const [mountedDate, setMountedDate] = useState(null);
+  const [rotatedDate, setRotatedDate] = useState(null);
+
+  useEffect(() => {
+    setMountedDate(new Date());
+  }, []);
 
   const rotateButton = () => {
     setRotateCount(rotateCount + 1);
+    setRotatedDate(new Date());
+  };
+
+  const formatDate = (date, isMountedDate = true) => {
+    const msg = `Not ${isMountedDate ? "mounted" : "rotated"} yet`;
+    return date ? Moment(date)?.format("hh:mm:ss A") : msg;
+  };
+
+  const squareStyle = (isLargeSquare = true) => {
+    const colorIndex =
+      (isLargeSquare ? rotateCount : rotateCount + 1) % colors.length;
+
+    return {
+      transform: `rotate(${45 * rotateCount}deg)`,
+      backgroundColor: `${colors[colorIndex]}`,
+    };
   };
 
   return (
     <div className="App">
-      <button className="App__rotate-button" onClick={() => rotateButton()}>
+      <button className="App__rotate-button" onClick={rotateButton}>
         ROTATE SQUARE
       </button>
       <div
         className="App__rotate-square-inner"
-        style={{
-          transform: `rotate(${(45 * rotateCount) % 360}deg)`,
-          backgroundColor: `${colors[(rotateCount + 1) % colors.length]}`,
-        }}
+        style={squareStyle(false)}
       ></div>
-      <div
-        className="App__rotate-square"
-        style={{
-          transform: `rotate(${(45 * rotateCount) % 360}deg)`,
-          backgroundColor: `${colors[rotateCount % colors.length]}`,
-        }}
-      />
+      <div className="App__rotate-square" style={squareStyle()} />
       <div className="App__stats-container">
         <div className="App__stat">
-          Mounted at: <span className="App__stats-value">HH:MM:SS AM/PM</span>
+          Mounted at:{" "}
+          <span className="App__stats-value">{formatDate(mountedDate)}</span>
         </div>
         <div className="App__stat">
-          Last rotated at:
-          <span className="App__stats-value">HH:MM:SS AM/PM</span>
+          Last rotated at:{" "}
+          <span className="App__stats-value">
+            {formatDate(rotatedDate, false)}
+          </span>
         </div>
         <div className="App__stat">
-          Number of times rotated: <span className="App__stats-value">X</span>
+          Number of times rotated:{" "}
+          <span className="App__stats-value">{rotateCount}</span>
         </div>
       </div>
     </div>
