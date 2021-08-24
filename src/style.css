@@ -61,6 +61,7 @@ body,
   height: 50px;
   background: var(--dark-blue);
   transition: transform 1s ease-in, background-color 1s ease-in-out;
+  z-index: 1;
 }
 
 .App__stats-container {
