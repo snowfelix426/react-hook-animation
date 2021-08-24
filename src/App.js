@@ -1,5 +1,5 @@
-import React from 'react';
-import './style.css';
+import React, { useState } from "react";
+import "./style.css";
 
 /*
 Complete the challenges below, *** USING REACT HOOKS ***:
@@ -15,11 +15,32 @@ Complete the challenges below, *** USING REACT HOOKS ***:
 */
 
 export default function App() {
+  const [rotateCount, setRotateCount] = useState(0);
+  const colors = ["#e301be", "#6b00ff", "#ff0066", "#24c5e0"];
+
+  const rotateButton = () => {
+    setRotateCount(rotateCount + 1);
+  };
+
   return (
     <div className="App">
-      <button className="App__rotate-button">ROTATE SQUARE</button>
-      <div className="App__rotate-square-inner" />
-      <div className="App__rotate-square" />
+      <button className="App__rotate-button" onClick={() => rotateButton()}>
+        ROTATE SQUARE
+      </button>
+      <div
+        className="App__rotate-square-inner"
+        style={{
+          transform: `rotate(${(45 * rotateCount) % 360}deg)`,
+          backgroundColor: `${colors[(rotateCount + 1) % colors.length]}`,
+        }}
+      ></div>
+      <div
+        className="App__rotate-square"
+        style={{
+          transform: `rotate(${(45 * rotateCount) % 360}deg)`,
+          backgroundColor: `${colors[rotateCount % colors.length]}`,
+        }}
+      />
       <div className="App__stats-container">
         <div className="App__stat">
           Mounted at: <span className="App__stats-value">HH:MM:SS AM/PM</span>
